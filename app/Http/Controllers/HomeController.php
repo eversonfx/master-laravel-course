@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *-,014x/g7
      * @return void
      */
     public function __construct()
@@ -26,11 +26,18 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function home() {
+    public function home()
+    {
         return view('home');
     }
 
-    public function contact() {
+    public function contact()
+    {
         return view('contact');
+    }
+
+    public function admin()
+    {
+        return view('admin');
     }
 }

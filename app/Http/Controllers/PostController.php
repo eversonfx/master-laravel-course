@@ -7,6 +7,7 @@ use \App\Http\Requests\StorePost;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
@@ -18,12 +19,18 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     //comments_count
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['create', 'store', 'update','destroy']);
+    }
+
+    //comments_count
     public function index()
     {
-        return view('posts.index',
-        ['posts' => BlogPost::withCount('comments')->get()]
-    );
+        return view(
+            'posts.index',
+            ['posts' => BlogPost::withCount('comments')->get()]
+        );
     }
 
     /**
@@ -36,13 +43,13 @@ class PostController extends Controller
     {
         // $request->session()->reflash();
 
-            return view('posts.show', [
+        return view('posts.show', [
                 'post' => BlogPost::with('comments')->findOrFail($id)
             ]);
-
     }
 
-    public function create() {
+    public function create()
+    {
         if (Auth::check()) {
             return view('posts.create');
         } else {
@@ -50,8 +57,8 @@ class PostController extends Controller
         }
     }
     
-    public function store(StorePost $request) {
-        
+    public function store(StorePost $request)
+    {
         $validateData = $request->validated();
 
         // dd($validateData);
@@ -63,13 +70,15 @@ class PostController extends Controller
         return redirect()->route('posts.show', ['post' => $blogPost->id]);
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $post = BlogPost::findOrFail($id);
         return view('posts.edit', ['post' => $post]);
     }
 
-    public function update(StorePost $request, $id) {
-        $post = BlogPost::findOrFail($id);  
+    public function update(StorePost $request, $id)
+    {
+        $post = BlogPost::findOrFail($id);
         $validatedData = $request->validated();
 
         $post->fill($validatedData);
@@ -78,10 +87,10 @@ class PostController extends Controller
         $request->session()->flash('status', 'Blog post was updated!');
 
         return redirect()->route('posts.show', ['post' => $post->id]);
-
     }
 
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, $id)
+    {
         $post = BlogPost::findOrFail($id);
         
         $post->delete();
@@ -91,6 +100,5 @@ class PostController extends Controller
         $request->session()->flash('status', 'Blog post was deleted!');
 
         return redirect()->route('posts.index');
-
     }
 }

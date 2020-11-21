@@ -1,20 +1,17 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
-
-use App\Author;
 use Faker\Generator as Faker;
 
-$factory->define(Author::class, function (Faker $faker) {
+$factory->define(App\Author::class, function (Faker $faker) {
     return [
         //
     ];
 });
 
-//Realizar algo extra
-//afterCreating -> O novo autor foi criado e salvo
-//afterMaking -> O novo autor foi instanciado mas ainda nao foi salvo
-
 $factory->afterCreating(App\Author::class, function ($author, $faker) {
     $author->profile()->save(factory(App\Profile::class)->make());
 });
+
+// $factory->afterMaking(App\Author::class, function ($author, $faker) {
+//     $author->profile()->save(factory(App\Profile::class)->make());
+// });

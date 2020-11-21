@@ -13,8 +13,15 @@ class CreateBlogpostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('blogposts', function (Blueprint $table) {
+        Schema::create('blog_posts', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->string('title')->default('');
+            $table->text('content')->nullable();
+
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->timestamps();
         });
     }
@@ -26,6 +33,6 @@ class CreateBlogpostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blogposts');
+        Schema::dropIfExists('blog_posts');
     }
 }
